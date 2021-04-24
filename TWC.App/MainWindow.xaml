@@ -1,0 +1,85 @@
+﻿<Window x:Class="TWC.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Key Resolver" Height="420" Width="810">
+
+    <Grid Height="383" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ListBox HorizontalAlignment="Left" Height="360" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" ItemsSource="{Binding Path=Files, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding SelectedFile}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel DataContext="{Binding SelectedFile}" Margin="285,46,20,13" DockPanel.Dock="Left" Width="Auto" HorizontalAlignment="Stretch">
+            <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <TextBlock Text="  Source Id :" Height="18" Width="85" />
+                        <TextBlock Text="{Binding SourceId}" Height="18" Width="Auto" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <TextBlock Text="  Name :" Height="18" Width="85" />
+                        <TextBlock Text="{Binding Name}" Height="18" Width="Auto" TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <GridSplitter Height="30" Width="Auto" Background="White"/>
+            <DataGrid CurrentCellChanged="KeysGrid_CurrentCellChanged" Height="Auto" Width="Auto" Name="KeysGrid" AutoGenerateColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Keys, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Status" Width="Auto" MinWidth="55" IsReadOnly="True" Binding="{Binding Status}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="Active">
+                                        <Setter Property="Background" Value="LightGreen"/>
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="Expired">
+                                        <Setter Property="Background" Value="LightCoral"/>
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="Removed">
+                                        <Setter Property="Background" Value="LightCoral"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Value" Width="Auto" MinWidth="190" IsReadOnly="True" Binding="{Binding Value}"/>
+                    <DataGridTextColumn Header="Count" Width="Auto" MinWidth="45" Binding="{Binding Count}"/>
+                    <DataGridTextColumn Header="Expiry Date" Width="Auto" MinWidth="135" Binding="{Binding ExpiryDate}" />
+                    <DataGridTemplateColumn Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Remove" Width="Auto" MinWidth="55" Command="{Binding RemoveCommand}"></Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="Removed">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="Expired">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Height" Value="25"/>
+                    </Style>
+                </DataGrid.RowStyle>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Window>
