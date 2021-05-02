@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
-using TWC.App.Models;
+using TWC.Data.Models;
 
 namespace TWC.App.ViewModels
 {
     public class KeyViewModel
     {
+        #region Properties
         private Key _key;
-
-        private RelayCommand removeCommand;
 
         public string Value { get { return _key.KeyValue; }}
         public DateTime ExpiryDate
@@ -43,6 +42,7 @@ namespace TWC.App.ViewModels
         }
 
         public string Status { get; private set; }
+        #endregion
 
         public KeyViewModel(Key key)
         {
@@ -51,6 +51,8 @@ namespace TWC.App.ViewModels
             UpdateKeyStatus();
         }
 
+        #region Commands
+        private RelayCommand removeCommand;
         public RelayCommand RemoveCommand
         {
             get
@@ -63,6 +65,7 @@ namespace TWC.App.ViewModels
                 );
             }
         }
+        #endregion
 
         public void UpdateKeyStatus()
         {

@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using TWC.App.Context;
 using TWC.App.Processors;
+using TWC.Data;
+using TWC.Data.Repositories;
+using TWC.Data.Services;
 
 namespace TWC.App
 {
@@ -31,6 +33,9 @@ namespace TWC.App
             });
             services.AddSingleton(p => new GoogleDriveService(googleConfigPath));
             services.AddSingleton<MainWindow>();
+
+            services.AddTransient<FileService>();
+            services.AddTransient<FileRepository>();
         }
 
         private void OnStartup(object sender, StartupEventArgs e)

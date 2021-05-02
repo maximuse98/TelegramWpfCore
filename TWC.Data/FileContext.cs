@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using TelegramWpfCore.Models;
+using TWC.Data.Models;
 
 namespace TWC.Data
 {

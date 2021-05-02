@@ -1,35 +1,44 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using TWC.App.Models;
+using TWC.Data.Models;
+using TWC.Data.Services;
 
 namespace TWC.App.ViewModels
 {
-    public class ApplicationViewModel<T> : INotifyPropertyChanged where T : File
+    public class ApplicationViewModel : INotifyPropertyChanged
     {
-        private FileViewModel<T> selectedFile;
+        #region Properties
+        private FileService fileService;
+        private FileViewModel selectedFile;
 
-        public ObservableCollection<FileViewModel<T>> Files { get; set; }
+        public ObservableCollection<FileViewModel> Files { get; set; }
 
-        public FileViewModel<T> SelectedFile
+        public FileViewModel SelectedFile
         {
             get { return selectedFile; }
             set
             {
                 selectedFile = value;
+                List<Key> keys = fileService.GetKeys()
+                                        .Where(x => x.SourceId == selectedFile.SourceId)
+                                        .ToList();
+                selectedFile.SetKeys(keys);
                 OnPropertyChanged("SelectedFile");
             }
         }
+        #endregion
 
-        public ApplicationViewModel(List<T> files, List<Key> keys)
+        public ApplicationViewModel(FileService fileService)
         {
-            Files = new ObservableCollection<FileViewModel<T>>();
+            this.fileService = fileService;
+            Files = new ObservableCollection<FileViewModel>();
 
-            foreach (var file in files)
+            foreach (var file in fileService.GetFiles())
             {
-                var fileKeys = keys.FindAll(x => x.SourceId == file.SourceId);
-                Files.Add(new FileViewModel<T>(file, fileKeys));
+                Files.Add(new FileViewModel(file));
             }
         }
 

@@ -2,13 +2,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using TWC.App.Models;
+using TWC.Data.Models;
 
 namespace TWC.App.ViewModels
 {
-    public class FileViewModel<T> : INotifyPropertyChanged where T : File
+    public class FileViewModel : INotifyPropertyChanged
     {
-        private T _file;
+        #region Properties
+        private File _file;
 
         public string SourceId
         {
@@ -29,12 +30,18 @@ namespace TWC.App.ViewModels
             }
         }
         public ObservableCollection<KeyViewModel> Keys { get; set; }
+        #endregion
 
-        public FileViewModel(T file, List<Key> keys)
+        public FileViewModel(File file)
         {
             _file = file;
             Keys = new ObservableCollection<KeyViewModel>();
+        }
 
+        //for each click on file, keys are updated from db context
+        public void SetKeys(List<Key> keys)
+        {
+            Keys.Clear();
             foreach (var key in keys)
             {
                 Keys.Add(new KeyViewModel(key));

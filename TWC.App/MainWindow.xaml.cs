@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using TWC.App.Context;
-using TWC.App.Models;
 using TWC.App.Processors;
 using TWC.App.ViewModels;
+using TWC.Data.Services;
+using TWC.Data.Dtos;
 
 namespace TWC.App
 {
@@ -18,30 +13,34 @@ namespace TWC.App
     /// </summary>
     public partial class MainWindow : Window
     {
-        private FileContext db;
+        private readonly FileService fileService;
+        private GoogleDriveService fileStore;
 
-        public MainWindow(FileContext db, GoogleDriveService store)
+        public MainWindow(GoogleDriveService store, FileService fileService)
         {
             InitializeComponent();
 
-            this.db = db;
+            this.fileService = fileService;
+            this.fileStore = store;
 
-            db.Files.Load();
-            db.Keys.Load();
+            UpdateDbContext();
+            DataContext = new ApplicationViewModel(fileService);
+        }
 
-            IList<Google.Apis.Drive.v3.Data.File> files = store.Files;
-            List<GoogleFile> modelFiles = new List<GoogleFile>();
+        private void UpdateDbContext()
+        {
+            IList<Google.Apis.Drive.v3.Data.File> googleFiles = fileStore.Files;
+            List<FileDto> modelFilesDto = new List<FileDto>();
 
-            foreach (var file in files)
+            foreach (var file in googleFiles)
             {
-                modelFiles.Add(new GoogleFile(file));
+                modelFilesDto.Add(new FileDto {
+                    SourceId = file.Id,
+                    Name = file.Name
+                });
             }
-            db.UpdateFiles(modelFiles);
 
-            List<Key> modelKeys = db.Keys.ToList();
-            ApplicationViewModel<GoogleFile> appViewModel = new ApplicationViewModel<GoogleFile>(modelFiles, modelKeys);
-
-            DataContext = appViewModel;
+            fileService.AddOrUpdateFiles(modelFilesDto);
         }
 
         private void KeysGrid_CurrentCellChanged(object sender, EventArgs e)
@@ -56,7 +55,7 @@ namespace TWC.App
             }
             finally
             {
-                db.SaveChanges();
+                fileService.SaveChanges();
             }
         }
     }

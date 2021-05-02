@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace TelegramWpfCore.Models
+namespace TWC.Data.Models
 {
     public class Key
     {
