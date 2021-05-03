@@ -15,6 +15,8 @@ namespace TWC.App
     {
         private readonly FileService fileService;
         private GoogleDriveService fileStore;
+        
+        private ApplicationViewModel context;
 
         public MainWindow(GoogleDriveService store, FileService fileService)
         {
@@ -22,9 +24,12 @@ namespace TWC.App
 
             this.fileService = fileService;
             this.fileStore = store;
+            this.context = new ApplicationViewModel(fileService);
 
             UpdateDbContext();
-            DataContext = new ApplicationViewModel(fileService);
+            DataContext = context;
+
+            AddHandler(AddKeyWindow.AcceptEvent, new RoutedEventHandler(AddKey));
         }
 
         private void UpdateDbContext()
@@ -57,6 +62,17 @@ namespace TWC.App
             {
                 fileService.SaveChanges();
             }
+        }
+
+        private void AddKey_Click(object sender, RoutedEventArgs e)
+        {
+            AddKeyWindow window = new AddKeyWindow(context.SelectedFile);
+            window.Show();
+        }
+
+        private void AddKey(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

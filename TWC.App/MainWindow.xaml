@@ -18,7 +18,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel DataContext="{Binding SelectedFile}" Margin="285,46,20,13" DockPanel.Dock="Left" Width="Auto" HorizontalAlignment="Stretch">
+        <StackPanel DataContext="{Binding SelectedFile}" Margin="285,10,20,13" DockPanel.Dock="Left" Width="Auto">
+            <StackPanel Height="32" Orientation="Horizontal" Width="70" HorizontalAlignment="Right">
+                <Button Content="Add Key" Click="AddKey_Click" Width="70" Height="22"/>
+            </StackPanel>
             <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Height="30">

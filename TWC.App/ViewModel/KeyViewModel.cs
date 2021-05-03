@@ -51,6 +51,11 @@ namespace TWC.App.ViewModels
             UpdateKeyStatus();
         }
 
+        public KeyViewModel()
+        {
+            _key = new Key();
+        }
+
         #region Commands
         private RelayCommand removeCommand;
         public RelayCommand RemoveCommand
