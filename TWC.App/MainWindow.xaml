@@ -11,14 +11,14 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListBox HorizontalAlignment="Left" Height="360" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" ItemsSource="{Binding Path=Files, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding SelectedFile}">
+        <ListBox SelectionChanged="ListBox_SelectionChanged" HorizontalAlignment="Left" Height="360" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" ItemsSource="{Binding Path=Files, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding SelectedFile}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel DataContext="{Binding SelectedFile}" Margin="285,10,20,13" DockPanel.Dock="Left" Width="Auto">
+        <StackPanel x:Name="ContentPanel" Visibility="Hidden" DataContext="{Binding SelectedFile}" Margin="285,10,20,13" DockPanel.Dock="Left" Width="Auto">
             <StackPanel Height="32" Orientation="Horizontal" Width="70" HorizontalAlignment="Right">
                 <Button Content="Add Key" Click="AddKey_Click" Width="70" Height="22"/>
             </StackPanel>

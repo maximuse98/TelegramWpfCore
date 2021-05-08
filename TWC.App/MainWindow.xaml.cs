@@ -5,6 +5,7 @@ using TWC.App.Processors;
 using TWC.App.ViewModels;
 using TWC.Data.Services;
 using TWC.Data.Dtos;
+using System.Windows.Controls;
 
 namespace TWC.App
 {
@@ -14,7 +15,7 @@ namespace TWC.App
     public partial class MainWindow : Window
     {
         private readonly FileService fileService;
-        private GoogleDriveService fileStore;
+        private readonly GoogleDriveService fileStore;
         
         private ApplicationViewModel context;
 
@@ -28,8 +29,6 @@ namespace TWC.App
 
             UpdateDbContext();
             DataContext = context;
-
-            AddHandler(AddKeyWindow.AcceptEvent, new RoutedEventHandler(AddKey));
         }
 
         private void UpdateDbContext()
@@ -48,6 +47,7 @@ namespace TWC.App
             fileService.AddOrUpdateFiles(modelFilesDto);
         }
 
+        #region Event Handlers
         private void KeysGrid_CurrentCellChanged(object sender, EventArgs e)
         {
             try
@@ -67,12 +67,22 @@ namespace TWC.App
         private void AddKey_Click(object sender, RoutedEventArgs e)
         {
             AddKeyWindow window = new AddKeyWindow(context.SelectedFile);
+
+            window.AddHandler(AddKeyWindow.AcceptEvent, new RoutedEventHandler(AddKey));
             window.Show();
         }
 
         private void AddKey(object sender, RoutedEventArgs e)
         {
-
+            AddKeyWindow requestWindow = sender as AddKeyWindow;
+            fileService.AddKey(requestWindow.Key);
+            requestWindow.Close();
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ContentPanel.Visibility = Visibility.Visible;
+        }
+        #endregion
     }
 }
