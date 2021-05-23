@@ -83,7 +83,7 @@ namespace TWC.App
             this.Key = new KeyDto() 
             { 
                 KeyValue = KeyInput.Text.Trim(),
-                ExpiryDate = DateInput.SelectedDate.Value,
+                ExpiryDate = DateInput.SelectedDate.Value.AddHours(DateTime.Now.Hour),
                 Count = Int32.Parse(CountInput.Text.Trim()),
                 SourceId = SelectedFile.SourceId
             };

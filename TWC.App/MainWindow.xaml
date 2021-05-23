@@ -19,8 +19,13 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <StackPanel x:Name="ContentPanel" Visibility="Hidden" DataContext="{Binding SelectedFile}" Margin="285,10,20,13" DockPanel.Dock="Left" Width="Auto">
-            <StackPanel Height="32" Orientation="Horizontal" Width="70" HorizontalAlignment="Right">
-                <Button Content="Add Key" Click="AddKey_Click" Width="70" Height="22"/>
+            <StackPanel Height="35" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Click="AddKey_Click" Style="{StaticResource ResourceKey=ButtonYellow}" Width="75" Height="23">
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <Image Source="/Resources/keyButton.png"/>
+                        <TextBlock Text="Add Key"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
             <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
                 <StackPanel Orientation="Vertical">
@@ -37,44 +42,16 @@
             <GridSplitter Height="30" Width="Auto" Background="White"/>
             <DataGrid CurrentCellChanged="KeysGrid_CurrentCellChanged" Height="Auto" Width="Auto" Name="KeysGrid" AutoGenerateColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Keys, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Status" Width="Auto" MinWidth="55" IsReadOnly="True" Binding="{Binding Status}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Style.Triggers>
-                                    <Trigger Property="Text" Value="Active">
-                                        <Setter Property="Background" Value="LightGreen"/>
-                                    </Trigger>
-                                    <Trigger Property="Text" Value="Expired">
-                                        <Setter Property="Background" Value="LightCoral"/>
-                                    </Trigger>
-                                    <Trigger Property="Text" Value="Removed">
-                                        <Setter Property="Background" Value="LightCoral"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Status" ElementStyle="{StaticResource CellStatusStyle}"  Width="Auto" MinWidth="55" IsReadOnly="True" Binding="{Binding Status}"/>
                     <DataGridTextColumn Header="Value" Width="Auto" MinWidth="190" IsReadOnly="True" Binding="{Binding Value}"/>
                     <DataGridTextColumn Header="Count" Width="Auto" MinWidth="45" Binding="{Binding Count}"/>
                     <DataGridTextColumn Header="Expiry Date" Width="Auto" MinWidth="135" Binding="{Binding ExpiryDate}" />
-                    <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn CellStyle="{StaticResource CellButtonStyle}" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Remove" Width="Auto" MinWidth="55" Command="{Binding RemoveCommand}"></Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Status}" Value="Removed">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Status}" Value="Expired">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTemplateColumn.CellStyle>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 <DataGrid.RowStyle>

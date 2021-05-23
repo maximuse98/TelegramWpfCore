@@ -62,7 +62,7 @@ namespace TWC.Data.Services
                 throw new ArgumentException("Provided SourceId is invalid");
             }
 
-            key.ExpiryDate = key.ExpiryDate.ToString() == null ? key.ExpiryDate : DateTime.Now.AddDays(10);
+            key.ExpiryDate = key.ExpiryDate.ToString() == null ? DateTime.Now.AddDays(10) : key.ExpiryDate;
             key.Count = key.Count > 0 ? key.Count : 5;
         }
     

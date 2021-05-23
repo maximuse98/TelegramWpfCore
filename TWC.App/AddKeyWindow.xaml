@@ -3,26 +3,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Add Key" ResizeMode="NoResize" Height="275" Width="530">
     <StackPanel Orientation="Horizontal" Width="Auto">
         <Image Source="/Resources/key.png" Height="200" Width="180"/>
         <StackPanel Margin="15,10,0,0"  Orientation="Vertical" Width="Auto" Height="230">
             <StackPanel Orientation="Horizontal" Height="40" Width="Auto">
-                <Label Content="Selected file:" Height="30" Width="90"/>
+                <Label Content="File:" Height="30" Width="90"/>
                 <Label x:Name="FileName" Content="SampleFileName.xlsx" Height="30" Width="200"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Height="40" Width="Auto">
                 <Label Content="Key value:" Width="90" Height="30"/>
-                <TextBox x:Name="KeyInput" TextChanged="Input_Change" Width="200" Height="20"/>
+                <TextBox x:Name="KeyInput" TextChanged="Input_Change" Width="200" Height="20" Style="{StaticResource TextBoxDefault}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Height="40" Width="Auto">
                 <Label Content="Expiry date:" Width="90" Height="30"/>
-                <DatePicker x:Name="DateInput" SelectedDateChanged="DateInput_SelectedDateChanged" Width="200" Height="24"/>
+                <Border BorderBrush="#999999" BorderThickness="1" CornerRadius="2" Width="200" Height="23">
+                    <DatePicker x:Name="DateInput" BorderThickness="0" DisplayDateStart="{x:Static sys:DateTime.Now}" SelectedDateChanged="DateInput_SelectedDateChanged"/>
+                </Border>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Height="40" Width="Auto">
                 <Label Content="Count:" Width="90" Height="30"/>
-                <TextBox x:Name="CountInput" TextChanged="Input_Change" Width="100" Height="20"/>
+                <Border BorderBrush="#999999" BorderThickness="1" CornerRadius="2" Width="100" Height="20">
+                    <TextBox x:Name="CountInput" Margin="2" TextChanged="Input_Change" BorderThickness="0"/>
+                </Border>
             </StackPanel>
             <StackPanel x:Name="ErrorPanel" Visibility="Hidden" Orientation="Horizontal" Height="20" Width="Auto">
                 <Grid Width="20" Height="20">
@@ -32,11 +37,11 @@
                 <TextBlock x:Name="ErrorOutput" Foreground="Red" FontWeight="Thin" Text="Error key format" Width="300" Height="18"></TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Height="40" Width="Auto">
-                <Button Content="Generate" Width="72" Height="20" Click="Generate_Click"/>
+                <Button Content="Generate" Width="72" Height="20" Click="Generate_Click" Style="{StaticResource ButtonYellow}"/>
                 <Separator Width="80" Visibility="Hidden" />
-                <Button Content="Accept" Width="72" Height="20" Click="Accept_Click"/>
+                <Button Content="Accept" Width="72" Height="20" Click="Accept_Click" Style="{StaticResource ButtonGreen}"/>
                 <Separator Width="10" Visibility="Hidden" />
-                <Button Content="Cancel" Width="72" Height="20" Click="Cancel_Click"/>
+                <Button Content="Cancel" Width="72" Height="20" Click="Cancel_Click" Style="{StaticResource ButtonRed}"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>
