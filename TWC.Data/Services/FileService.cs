@@ -18,7 +18,7 @@ namespace TWC.Data.Services
 
         public void AddKey(KeyDto key)
         {
-            ValidateKey(key);
+            ValidateKeyDto(key);
             fileRepository.AddKey(key);
         }
 
@@ -26,7 +26,7 @@ namespace TWC.Data.Services
 
         public void AddOrUpdateFile(FileDto file)
         {
-            ValidateFile(file);
+            ValidateFileDto(file);
             fileRepository.AddOrUpdateFile(file);
         }
 
@@ -37,7 +37,19 @@ namespace TWC.Data.Services
                 AddOrUpdateFile(file);
             }
         }
-        
+
+        public File GetFileByKey(string keyValue)
+        {
+            ValidateKey(keyValue);
+            return fileRepository.GetFileByKey(keyValue);
+        }
+
+        public void ReduceKeyCount(string keyValue)
+        {
+            fileRepository.GetKey(keyValue).Count--;
+            SaveChanges();
+        }
+
         public void SaveChanges()
         {
             fileRepository.SaveChanges();
@@ -47,7 +59,24 @@ namespace TWC.Data.Services
 
         public Key[] GetKeys() => fileRepository.GetKeys();
 
-        private void ValidateKey(KeyDto key)
+        private void ValidateKey(string keyValue)
+        {
+            Key key = fileRepository.GetKey(keyValue);
+            if (key == null)
+            {
+                throw new ArgumentException("Provided key value is invalid");
+            }
+            if (key.ExpiryDate < DateTime.Now)
+            {
+                throw new ArgumentException("Key is expired");
+            }
+            if (key.Count == 0)
+            {
+                throw new ArgumentException("Key is already activated");
+            }
+        }
+
+        private void ValidateKeyDto(KeyDto key)
         {
             if(key.SourceId == null)
             {
@@ -66,7 +95,7 @@ namespace TWC.Data.Services
             key.Count = key.Count > 0 ? key.Count : 5;
         }
     
-        private void ValidateFile(FileDto file)
+        private void ValidateFileDto(FileDto file)
         {
             if (file.Name == null)
             {

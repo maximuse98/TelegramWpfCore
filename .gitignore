@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/TWC.Bot/token
+/TWC.Bot/credentials.json
+/TWC.App/credentials.json
+/TWC.App/appsettings.json
+/TWC.Bot/appsettings.json
+/TWC.Bot/appsettings.Development.json

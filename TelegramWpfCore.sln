@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWC.App", "TWC.App\TWC.App.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWC.Data", "TWC.Data\TWC.Data.csproj", "{246DFFC8-5D0E-4D8A-BA62-15AA0124EAF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWC.Bot", "TWC.Bot\TWC.Bot.csproj", "{789A7B57-1258-4381-96E8-C30218FDEA50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,14 @@ Global
 		{246DFFC8-5D0E-4D8A-BA62-15AA0124EAF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{246DFFC8-5D0E-4D8A-BA62-15AA0124EAF9}.Release|x64.ActiveCfg = Release|x64
 		{246DFFC8-5D0E-4D8A-BA62-15AA0124EAF9}.Release|x64.Build.0 = Release|x64
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Debug|x64.Build.0 = Debug|Any CPU
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Release|x64.ActiveCfg = Release|Any CPU
+		{789A7B57-1258-4381-96E8-C30218FDEA50}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

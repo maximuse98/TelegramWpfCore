@@ -81,5 +81,11 @@ namespace TWC.Data.Repositories
         {
             return dbContext.Keys.Where(x => x.KeyValue == value).FirstOrDefault();
         }
+
+        public File GetFileByKey(string keyValue)
+        {
+            string fileId = dbContext.Keys.Where(x => x.KeyValue == keyValue).FirstOrDefault().SourceId;
+            return dbContext.Files.Where(x => x.SourceId == fileId).FirstOrDefault();
+        }
     }
 }

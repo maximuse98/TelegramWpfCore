@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using TWC.App.Processors;
 using TWC.App.ViewModels;
 using TWC.Data.Services;
 using TWC.Data.Dtos;
