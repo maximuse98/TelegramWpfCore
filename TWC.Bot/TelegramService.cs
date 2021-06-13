@@ -1,17 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.InputFiles;
+using TWC.Bot.Services;
 using TWC.Data.Services;
 
 namespace TWC.Bot.Service
@@ -45,29 +43,50 @@ namespace TWC.Bot.Service
         {
             Message message;
 
-            string messageText = e.Message.Text.ToString();
-            string fileName = GoogleDrive.GetFileNameByKey(messageText);
-            GoogleDrive.DownloadByKey(messageText);
+            string messageText = KeyEncryptor.Encrypt(Configuration["EncryptionKey"],e.Message.Text.ToString());
 
-            using (FileStream fileStream = System.IO.File.Open(Configuration["DownloadPath"] + "/" + fileName, FileMode.Open))
+            try
             {
-                message = await BotClient.SendDocumentAsync(
-                    chatId: e.Message.Chat,
-                    document: new InputOnlineFile(fileStream, fileName)
+                string fileName = GoogleDrive.GetFileNameByKey(messageText);
+                GoogleDrive.DownloadByKey(messageText);
+
+                using (FileStream fileStream = System.IO.File.Open(Configuration["DownloadPath"] + "/" + fileName, FileMode.Open))
+                {
+                    message = await BotClient.SendDocumentAsync(
+                        chatId: e.Message.Chat,
+                        document: new InputOnlineFile(fileStream, fileName)
+                    );
+                }
+
+                _logger.LogInformation(
+                    $"{message.From.FirstName} sent file {fileName} " +
+                    $"to user {e.Message.From.Username} at {message.Date}. "
                 );
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(
+                    $"File was not sent to user {e.Message.From.Username} with text '{e.Message.Text}' " +
+                    $"because of exception: {ex.Message}."
+                );
 
-            _logger.LogInformation(
-                $"{message.From.FirstName} sent file {fileName} " +
-                $"to user {e.Message.From.Username} at {message.Date}. "
-            );
+                await BotClient.SendTextMessageAsync(
+                    chatId: e.Message.Chat,
+                    text: ex.Message
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now} : {ex.Message}");
+            }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(100000, stoppingToken);
             }
         }

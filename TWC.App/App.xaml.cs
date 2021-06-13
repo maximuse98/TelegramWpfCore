@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Windows;
+using TWC.App.Service;
 using TWC.Data;
 using TWC.Data.Repositories;
 using TWC.Data.Services;
@@ -15,7 +16,7 @@ namespace TWC.App
     /// </summary>
     public partial class App : Application
     {
-        private ServiceProvider serviceProvider;
+        private readonly ServiceProvider serviceProvider;
 
         public App()
         {        
@@ -33,6 +34,7 @@ namespace TWC.App
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             IConfigurationRoot configuration = builder.Build();
+            KeyEncryptor.Key = configuration["EncryptionKey"];
 
             services.AddDbContext<FileContext>(options =>
             {              

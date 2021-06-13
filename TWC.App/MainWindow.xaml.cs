@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
+
+using TWC.App.Service;
 using TWC.App.ViewModels;
 using TWC.Data.Services;
 using TWC.Data.Dtos;
-using System.Windows.Controls;
 
 namespace TWC.App
 {
@@ -15,8 +17,8 @@ namespace TWC.App
     {
         private readonly FileService fileService;
         private readonly GoogleDriveService fileStore;
-        
-        private ApplicationViewModel context;
+
+        private readonly ApplicationViewModel context;
 
         public MainWindow(GoogleDriveService store, FileService fileService)
         {
@@ -74,6 +76,10 @@ namespace TWC.App
         private void AddKey(object sender, RoutedEventArgs e)
         {
             AddKeyWindow requestWindow = sender as AddKeyWindow;
+
+            //encrypt input key value before insert in db
+            requestWindow.Key.KeyValue = KeyEncryptor.Encrypt(requestWindow.Key.KeyValue);
+
             fileService.AddKey(requestWindow.Key);
             requestWindow.Close();
         }

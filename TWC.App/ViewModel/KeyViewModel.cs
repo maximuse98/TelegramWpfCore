@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Text;
 using TWC.Data.Models;
+using TWC.App.Service;
 
 namespace TWC.App.ViewModels
 {
@@ -12,7 +9,10 @@ namespace TWC.App.ViewModels
         #region Properties
         private Key _key;
 
-        public string Value { get { return _key.KeyValue; }}
+        public string Value 
+        { 
+            get { return KeyEncryptor.Decrypt(_key.KeyValue); }
+        }
         public DateTime ExpiryDate
         { 
             get { return _key.ExpiryDate; } 
