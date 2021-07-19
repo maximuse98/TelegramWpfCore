@@ -4,21 +4,24 @@ using System.Text;
 using TWC.Data.Dtos;
 using TWC.Data.Models;
 using TWC.Data.Repositories;
+using TWC.Data.Validators;
 
 namespace TWC.Data.Services
 {
     public class FileService
     {
         private readonly FileRepository fileRepository;
+        private IValidator validator;
 
-        public FileService(FileRepository repository)
+        public FileService(FileRepository repository, IValidator validator)
         {
             this.fileRepository = repository;
+            this.validator = validator;
         }
 
         public void AddKey(KeyDto key)
         {
-            ValidateKeyDto(key);
+            this.validator.Validate(key);
             fileRepository.AddKey(key);
         }
 
@@ -26,7 +29,7 @@ namespace TWC.Data.Services
 
         public void AddOrUpdateFile(FileDto file)
         {
-            ValidateFileDto(file);
+            this.validator.Validate(file);
             fileRepository.AddOrUpdateFile(file);
         }
 
@@ -40,7 +43,7 @@ namespace TWC.Data.Services
 
         public File GetFileByKey(string keyValue)
         {
-            ValidateKey(keyValue);
+            this.validator.Validate(fileRepository.GetKey(keyValue));
             return fileRepository.GetFileByKey(keyValue);
         }
 
@@ -58,53 +61,5 @@ namespace TWC.Data.Services
         public File[] GetFiles() => fileRepository.GetFiles();
 
         public Key[] GetKeys() => fileRepository.GetKeys();
-
-        private void ValidateKey(string keyValue)
-        {
-            Key key = fileRepository.GetKey(keyValue);
-            if (key == null)
-            {
-                throw new ArgumentException("Provided key value is invalid");
-            }
-            if (key.ExpiryDate < DateTime.Now)
-            {
-                throw new ArgumentException("Key is expired");
-            }
-            if (key.Count == 0)
-            {
-                throw new ArgumentException("Key is already activated");
-            }
-        }
-
-        private void ValidateKeyDto(KeyDto key)
-        {
-            if(key.SourceId == null)
-            {
-                throw new ArgumentNullException("SourceId");
-            }
-            if(key.KeyValue == null)
-            {
-                throw new ArgumentNullException("KeyValue");
-            }
-            if(fileRepository.GetFile(key.SourceId) == null)
-            {
-                throw new ArgumentException("Provided SourceId is invalid");
-            }
-
-            key.ExpiryDate = key.ExpiryDate.ToString() == null ? DateTime.Now.AddDays(10) : key.ExpiryDate;
-            key.Count = key.Count > 0 ? key.Count : 5;
-        }
-    
-        private void ValidateFileDto(FileDto file)
-        {
-            if (file.Name == null)
-            {
-                throw new ArgumentNullException("Name");
-            }
-            if (file.SourceId == null)
-            {
-                throw new ArgumentNullException("SourceId");
-            }
-        }
     }
 }

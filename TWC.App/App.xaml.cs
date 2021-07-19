@@ -8,6 +8,7 @@ using TWC.App.Service;
 using TWC.Data;
 using TWC.Data.Repositories;
 using TWC.Data.Services;
+using TWC.Data.Validators;
 
 namespace TWC.App
 {
@@ -48,6 +49,7 @@ namespace TWC.App
             services.AddSingleton<GoogleDriveService>();
             services.AddSingleton<MainWindow>();
 
+            services.AddSingleton<IValidator, Validator>();
             services.AddTransient<FileService>();
             services.AddTransient<FileRepository>();
         }

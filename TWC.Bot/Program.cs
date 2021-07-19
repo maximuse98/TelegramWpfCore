@@ -6,6 +6,7 @@ using TWC.Bot.Service;
 using TWC.Data;
 using TWC.Data.Repositories;
 using TWC.Data.Services;
+using TWC.Data.Validators;
 
 namespace TWC.Bot
 {
@@ -34,6 +35,7 @@ namespace TWC.Bot
                     services.AddScoped<FileRepository>();
                     services.AddScoped<FileService>();
 
+                    services.AddSingleton<IValidator, Validator>();
                     services.AddSingleton<GoogleDriveService>();
                 });
     }

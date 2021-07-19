@@ -72,8 +72,8 @@ namespace TWC.Data.Services
 
             FileService fileService = scope.ServiceProvider.GetRequiredService<FileService>();
             string fileId = fileService.GetFileByKey(key).SourceId;
-            DownloadFile(fileId);
 
+            DownloadFile(fileId);
             fileService.ReduceKeyCount(key);
         }
 
@@ -86,11 +86,15 @@ namespace TWC.Data.Services
         public void DownloadFile(string fileId)
         {
             Google.Apis.Drive.v3.Data.File file = Files.Where(f => f.Id == fileId).FirstOrDefault();
+            string path = Configuration["DownloadPath"] + "/" + file.Name;
 
-            StreamWriter output = new StreamWriter(Configuration["DownloadPath"] + "/" + file.Name);
-            DriveService.Files.Get(file.Id).Download(output.BaseStream);
+            if (!File.Exists(path))
+            {
+                StreamWriter output = new StreamWriter(path);
+                DriveService.Files.Get(file.Id).Download(output.BaseStream);
 
-            output.Close();
+                output.Close();
+            }
         } 
     }
 }
